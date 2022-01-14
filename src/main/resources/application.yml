@@ -1,0 +1,29 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-exception: false
+
+spring:
+  application:
+    name: auth
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://localhost:5432/chat-app
+    username: root
+    password: root
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: iuridelimamarques@gmail.com
+    password: dlszynlveidepfii
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
