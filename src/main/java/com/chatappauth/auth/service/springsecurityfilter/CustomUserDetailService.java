@@ -33,8 +33,8 @@ public class CustomUserDetailService implements UserDetailsService {
             LocalDateTime dateExpiration = Instant.ofEpochMilli(expirantionMilli).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             loggedUser = new UserPrincipal(user, dateExpiration);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } catch (UsernameNotFoundException e) {
+            throw new RuntimeException("Username not found");
         }
 
         return loggedUser;
