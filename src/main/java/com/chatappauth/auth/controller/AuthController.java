@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.websocket.server.PathParam;
 import javax.xml.bind.ValidationException;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "signup")
-    public EmailValidationProjection registerUser(@RequestBody User user) throws ValidationException, AddressException, IOException {
+    public EmailValidationProjection registerUser(@RequestBody User user) throws ValidationException, MessagingException, IOException {
         return authBusiness.signupUser(user);
     }
 

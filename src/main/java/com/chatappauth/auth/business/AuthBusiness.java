@@ -10,13 +10,11 @@ import com.chatcomponents.Authority;
 import com.chatcomponents.QUser;
 import com.chatcomponents.User;
 import com.chatcomponents.UserStatus;
-import com.google.common.collect.Lists;
-import it.ozimov.springboot.mail.model.Email;
-import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
-import it.ozimov.springboot.mail.service.EmailService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.xml.bind.ValidationException;
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -55,7 +52,7 @@ public class AuthBusiness {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private EmailService emailService;
+    private JavaMailSender javaMailSender;
 
     public JwtResponse signinUser(User user) {
         return signin(user.getEmail(), user.getUserPassword());
@@ -83,12 +80,11 @@ public class AuthBusiness {
         }
     }
 
-    public EmailValidationProjection signupUser(User user) throws ValidationException, AddressException, IOException {
+    public EmailValidationProjection signupUser(User user) throws ValidationException, MessagingException, IOException {
         if (userRepository.exists(QUser.user.email.eq(user.getEmail())))
             throw new ValidationException("This e-mail address is already being used");
 
         String validationCode = generateCode(6);
-        sendEmail(validationCode, user.getEmail());
 
         user.setCodeValidation(validationCode);
         user.setStatus(UserStatus.USER_VALIDATION);
@@ -98,23 +94,33 @@ public class AuthBusiness {
         Authority authority = new Authority("ROLE_ADMIN", savedUser);
         authorityRepository.save(authority);
 
+        sendEmail(validationCode, user.getEmail());
+
         EmailValidationProjection emailValidationProjection = new EmailValidationProjection();
         emailValidationProjection.setEmail(user.getEmail());
         return emailValidationProjection;
     }
 
-    private void sendEmail(String validationCode, String userEmail) throws AddressException, IOException {
-        URL url = getClass().getResource("../java/com/chatappauth/auth/email-body.html");
-        File fis = new File(url.getPath());
+    private void sendEmail(String validationCode, String userEmail) throws MessagingException, IOException {
+        Optional<User> user = userRepository.findOne(QUser.user.email.eq(userEmail));
+        String htmlBody = loadEmailBody(validationCode, user.get().getName());
 
-        final Email email = DefaultEmail.builder()
-                .from(new InternetAddress("support@chatapp.com"))
-                .to(Lists.newArrayList(new InternetAddress(userEmail)))
-                .subject("Chatapp code validation")
-                .body(fis.toString())
-                .encoding(String.valueOf(Charset.forName("UTF-8"))).build();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-        emailService.send(email);
+        helper.setText(htmlBody, true);
+        helper.setTo(userEmail);
+        helper.setSubject("Chatapp code validation");
+        helper.setFrom("support@chatapp.com");
+        javaMailSender.send(mimeMessage);
+    }
+
+    private String loadEmailBody(String validationCode, String name) throws IOException {
+        ClassPathResource resource =  new ClassPathResource("/email-body.html", AuthBusiness.class);
+        InputStream inputStream = resource.getInputStream();
+        String htmlBody = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        return htmlBody.replace("{{codeVerification}}", validationCode)
+                .replace("{{username}}", name);
     }
 
     private String generateCode(int codeLength) {
