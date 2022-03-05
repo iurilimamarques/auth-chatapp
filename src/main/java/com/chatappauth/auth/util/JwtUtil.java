@@ -1,14 +1,13 @@
 package com.chatappauth.auth.util;
 
 import com.auth0.jwt.JWT;
-import com.chatappauth.auth.config.SecurityConstants;
 import com.chatappauth.auth.dto.JwtValidationDto;
 import com.chatappauth.auth.dto.UserPrincipalDto;
 import com.chatappauth.auth.repository.UserRepository;
 import com.chatcomponents.QUser;
 import com.chatcomponents.User;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -21,8 +20,14 @@ import java.util.Optional;
 @Component
 public class JwtUtil {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    @Value("${auth-chatapp.keySecret}")
+    private String keySecret;
+
+    public JwtUtil(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public String generateJwtToken(Authentication authentication) {
         UserPrincipalDto userPrincipalDto = (UserPrincipalDto) authentication.getPrincipal();
@@ -32,19 +37,19 @@ public class JwtUtil {
                 .setSubject((userPrincipalDto.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(zdt.toInstant()))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.KEY)
+                .signWith(SignatureAlgorithm.HS512, keySecret)
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(SecurityConstants.KEY).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(keySecret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public JwtValidationDto validateJwtToken(String authToken) {
         JwtValidationDto jwtValidationDto = null;
 
         try {
-            Jwts.parser().setSigningKey(SecurityConstants.KEY).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(keySecret).parseClaimsJws(authToken);
 
             Optional optional = userRepository.findOne(QUser.user.email.eq(getUserNameFromJwtToken(authToken)));
             User user = (User) optional.get();
