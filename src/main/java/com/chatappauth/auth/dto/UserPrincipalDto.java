@@ -13,13 +13,13 @@ import java.util.Collection;
 import java.util.Date;
 
 @Getter
-public class UserPrincipal implements UserDetails {
+public class UserPrincipalDto implements UserDetails {
 
 
     private User user;
     private LocalDateTime expirationTime;
 
-    public UserPrincipal(User user, LocalDateTime expirationTime) {
+    public UserPrincipalDto(User user, LocalDateTime expirationTime) {
         this.user = user;
         this.expirationTime = expirationTime;
     }

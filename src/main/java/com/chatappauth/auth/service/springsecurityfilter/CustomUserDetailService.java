@@ -1,7 +1,7 @@
 package com.chatappauth.auth.service.springsecurityfilter;
 
 import com.chatappauth.auth.config.SecurityConstants;
-import com.chatappauth.auth.dto.UserPrincipal;
+import com.chatappauth.auth.dto.UserPrincipalDto;
 import com.chatappauth.auth.repository.UserRepository;
 import com.chatcomponents.QUser;
 import com.chatcomponents.User;
@@ -23,7 +23,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        UserPrincipal loggedUser = null;
+        UserPrincipalDto loggedUser = null;
 
         try {
             User user = (User) userRepository.findOne(QUser.user.email.eq(username))
@@ -32,7 +32,7 @@ public class CustomUserDetailService implements UserDetailsService {
             long expirantionMilli = Instant.now().toEpochMilli() + SecurityConstants.EXPIRATION_TIME;
             LocalDateTime dateExpiration = Instant.ofEpochMilli(expirantionMilli).atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-            loggedUser = new UserPrincipal(user, dateExpiration);
+            loggedUser = new UserPrincipalDto(user, dateExpiration);
         } catch (UsernameNotFoundException e) {
             throw new RuntimeException("Username not found");
         }

@@ -1,8 +1,7 @@
 package com.chatappauth.auth.controller;
 
-import com.chatappauth.auth.dto.JwtValidation;
+import com.chatappauth.auth.dto.JwtValidationDto;
 import com.chatappauth.auth.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth/jwt-validation")
 public class JwtValidationController {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+
+    public JwtValidationController(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     @GetMapping(path = "validate-token/{token}")
     public ResponseEntity validateToken(@PathVariable("token") String token) {
-        JwtValidation jwtValidation = jwtUtil.validateJwtToken(token);
-        return ResponseEntity.ok(jwtValidation);
+        JwtValidationDto jwtValidationDto = jwtUtil.validateJwtToken(token);
+        return ResponseEntity.ok(jwtValidationDto);
     }
-
-
 }

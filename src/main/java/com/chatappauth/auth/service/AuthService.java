@@ -1,8 +1,8 @@
-package com.chatappauth.auth.business;
+package com.chatappauth.auth.service;
 
-import com.chatappauth.auth.controller.projection.EmailValidationProjection;
-import com.chatappauth.auth.dto.JwtResponse;
-import com.chatappauth.auth.dto.UserPrincipal;
+import com.chatappauth.auth.controller.projection.EmailValidationDto;
+import com.chatappauth.auth.dto.JwtResponseDto;
+import com.chatappauth.auth.dto.UserPrincipalDto;
 import com.chatappauth.auth.repository.AuthorityRepository;
 import com.chatappauth.auth.repository.UserRepository;
 import com.chatappauth.auth.util.JwtUtil;
@@ -10,7 +10,6 @@ import com.chatcomponents.Authority;
 import com.chatcomponents.QUser;
 import com.chatcomponents.User;
 import com.chatcomponents.UserStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,32 +32,34 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Component
-public class AuthBusiness {
+public class AuthService {
 
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final JavaMailSender javaMailSender;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AuthService(PasswordEncoder passwordEncoder,
+                       UserRepository userRepository,
+                       AuthorityRepository authorityRepository,
+                       AuthenticationManager authenticationManager,
+                       JwtUtil jwtUtil,
+                       JavaMailSender javaMailSender) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.javaMailSender = javaMailSender;
+    }
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private JavaMailSender javaMailSender;
-
-    public JwtResponse signinUser(User user) {
+    public JwtResponseDto signinUser(User user) {
         return signin(user.getEmail(), user.getUserPassword());
     }
 
-    private JwtResponse signin(String email, String password) {
+    private JwtResponseDto signin(String email, String password) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password));
@@ -66,9 +67,9 @@ public class AuthBusiness {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtil.generateJwtToken(authentication);
 
-            UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
+            UserPrincipalDto userDetails = (UserPrincipalDto) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-            return new JwtResponse(jwt, userDetails.getUser().getId(), userDetails.getUser().getEmail(), userDetails.getUser().getName(), userDetails.getExpirationTime(), roles);
+            return new JwtResponseDto(jwt, userDetails.getUser().getId(), userDetails.getUser().getEmail(), userDetails.getUser().getName(), userDetails.getExpirationTime(), roles);
         } catch (Exception e) {
             String message = e.getMessage();
             if (e instanceof BadCredentialsException) {
@@ -80,7 +81,7 @@ public class AuthBusiness {
         }
     }
 
-    public EmailValidationProjection signupUser(User user) throws ValidationException, MessagingException, IOException {
+    public EmailValidationDto signupUser(User user) throws ValidationException, MessagingException, IOException {
         if (userRepository.exists(QUser.user.email.eq(user.getEmail())))
             throw new ValidationException("This e-mail address is already being used");
 
@@ -96,9 +97,9 @@ public class AuthBusiness {
 
         sendEmail(validationCode, user.getEmail());
 
-        EmailValidationProjection emailValidationProjection = new EmailValidationProjection();
-        emailValidationProjection.setEmail(user.getEmail());
-        return emailValidationProjection;
+        EmailValidationDto emailValidationDto = new EmailValidationDto();
+        emailValidationDto.setEmail(user.getEmail());
+        return emailValidationDto;
     }
 
     private void sendEmail(String validationCode, String userEmail) throws MessagingException, IOException {
@@ -116,7 +117,7 @@ public class AuthBusiness {
     }
 
     private String loadEmailBody(String validationCode, String name) throws IOException {
-        ClassPathResource resource =  new ClassPathResource("/email-body.html", AuthBusiness.class);
+        ClassPathResource resource =  new ClassPathResource("/email-body.html", AuthService.class);
         InputStream inputStream = resource.getInputStream();
         String htmlBody = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         return htmlBody.replace("{{codeVerification}}", validationCode)

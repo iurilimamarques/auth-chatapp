@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class EmailValidationProjection implements Serializable {
+public class EmailValidationDto implements Serializable {
 
     private String email;
 }

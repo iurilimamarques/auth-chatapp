@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtValidation {
+public class JwtValidationDto {
 
     private String status;
     private String message;
@@ -20,7 +20,7 @@ public class JwtValidation {
     private String email;
     private LocalDateTime expirationTime;
 
-    public JwtValidation(String status, String message) {
+    public JwtValidationDto(String status, String message) {
         this.status = status;
         this.message = message;
     }
