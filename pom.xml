@@ -121,22 +121,6 @@
 			</activation>
 			<id>local</id>
 		</profile>
-		<profile>
-			<id>github</id>
-			<repositories>
-				<repository>
-					<id>central</id>
-					<url>https://repo1.maven.org/maven2</url>
-				</repository>
-				<repository>
-					<id>github</id>
-					<url>https://maven.pkg.github.com/iurilimamarques/chat-components</url>
-					<snapshots>
-						<enabled>true</enabled>
-					</snapshots>
-				</repository>
-			</repositories>
-		</profile>
 	</profiles>
 
 	<build>
@@ -193,4 +177,14 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<name>Github Packages</name>
+			<id>github</id>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<url>https://maven.pkg.github.com/iurilimamarques/chat-components</url>
+		</repository>
+	</repositories>
 </project>
