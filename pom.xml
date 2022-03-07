@@ -98,8 +98,6 @@
 				<groupId>com.chatcomponents</groupId>
 				<artifactId>chat-components</artifactId>
 				<version>${chat-components.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
