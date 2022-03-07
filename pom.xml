@@ -82,25 +82,22 @@
 			<artifactId>querydsl-mongodb</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.chatcomponents</groupId>
-			<artifactId>chat-entities</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.github.dozermapper</groupId>
 			<artifactId>dozer-core</artifactId>
 			<version>6.5.0</version>
 		</dependency>
-	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.chatcomponents</groupId>
-				<artifactId>chat-components</artifactId>
-				<version>${chat-components.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+		<dependency>
+			<groupId>com.chatcomponents</groupId>
+			<artifactId>chat-components</artifactId>
+			<version>${chat-components.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.chatcomponents</groupId>
+			<artifactId>chat-entities</artifactId>
+			<version>${chat-components.version}</version>
+		</dependency>
+	</dependencies>
 
 	<profiles>
 		<profile>
