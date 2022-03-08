@@ -93,7 +93,7 @@
 			<version>${chat-components.version}</version>
 		</dependency> -->
 		<dependency>
-		    <groupId>com.github.iurilimamarques</groupId>
+		    <groupId>com.github.iurilimamarques.chat-components</groupId>
 		    <artifactId>chat-entities</artifactId>
 		    <version>master-SNAPSHOT</version>
 		</dependency>
