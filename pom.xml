@@ -96,12 +96,19 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
+<!-- 			<dependency>
 				<groupId>com.chatcomponents</groupId>
 				<artifactId>chat-components</artifactId>
 				<version>${chat-components.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
+			</dependency> -->
+			<dependency>
+			    <groupId>com.github.iurilimamarques</groupId>
+			    <artifactId>chat-components</artifactId>
+			    <version>master-SNAPSHOT</version>
+			    <scope>import</scope>
+			    <type>pom</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -187,12 +194,8 @@
 
 	<repositories>
 		<repository>
-			<name>Github Packages</name>
-			<id>github</id>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<url>https://maven.pkg.github.com/iurilimamarques/chat-components</url>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 </project>
