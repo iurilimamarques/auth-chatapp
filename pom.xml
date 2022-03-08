@@ -97,17 +97,22 @@
 		    <artifactId>chat-entities</artifactId>
 		    <version>master-ecd978c5d2-1</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.github.iurilimamarques.chat-components</groupId>
+		    <artifactId>chat-components</artifactId>
+		    <version>master-ecd978c5d2-1</version>
+		</dependency>
 	</dependencies>
 
-	<dependencyManagement>
+<!-- 	<dependencyManagement>
 		<dependencies>
-<!-- 			<dependency>
+			<dependency>
 				<groupId>com.chatcomponents</groupId>
 				<artifactId>chat-components</artifactId>
 				<version>${chat-components.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency> -->
+			</dependency>
 			<dependency>
 			    <groupId>com.github.iurilimamarques.chat-components</groupId>
 			    <artifactId>chat-components</artifactId>
@@ -116,7 +121,7 @@
 			    <type>pom</type>
 			</dependency>
 		</dependencies>
-	</dependencyManagement>
+	</dependencyManagement> -->
 
 	<distributionManagement>
 		<repository>
