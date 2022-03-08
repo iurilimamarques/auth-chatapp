@@ -111,14 +111,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>Github Packages</name>
-			<url>https://maven.pkg.github.com/iurilimamarques/chat-components</url>
-		</repository>
-	</distributionManagement>
-
 	<profiles>
 		<profile>
 			<properties>
