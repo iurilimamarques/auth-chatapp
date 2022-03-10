@@ -95,7 +95,7 @@
 		<dependency>
 		    <groupId>com.github.iurilimamarques.chat-components</groupId>
 		    <artifactId>chat-entities</artifactId>
-		    <version>master-ecd978c5d2-1</version>
+		    <version>master-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
@@ -104,7 +104,7 @@
 			<dependency>
 			    <groupId>com.github.iurilimamarques</groupId>
 			    <artifactId>chat-components</artifactId>
-			    <version>master-ecd978c5d2-1</version>
+			    <version>master-SNAPSHOT</version>
 			    <scope>import</scope>
 			    <type>pom</type>
 			</dependency>
@@ -185,6 +185,19 @@
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
