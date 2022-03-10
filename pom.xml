@@ -87,15 +87,10 @@
 			<version>6.5.0</version>
 		</dependency>
 
-<!-- 		<dependency>
-			<groupId>com.chatcomponents</groupId>
-			<artifactId>chat-entities</artifactId>
-			<version>${chat-components.version}</version>
-		</dependency> -->
 		<dependency>
 		    <groupId>com.github.iurilimamarques.chat-components</groupId>
 		    <artifactId>chat-entities</artifactId>
-		    <version>master-SNAPSHOT</version>
+		    <version>6d1fd08fbd</version>
 		</dependency>
 	</dependencies>
 
@@ -104,7 +99,7 @@
 			<dependency>
 			    <groupId>com.github.iurilimamarques</groupId>
 			    <artifactId>chat-components</artifactId>
-			    <version>master-SNAPSHOT</version>
+			    <version>6d1fd08fbd</version>
 			    <scope>import</scope>
 			    <type>pom</type>
 			</dependency>
@@ -189,14 +184,14 @@
 				<enabled>true</enabled>
 			</snapshots>
 			<releases>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 			</releases>
 		</repository>
 		<repository>
 			<id>central</id>
 			<url>https://repo1.maven.org/maven2/</url>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 			<releases>
 				<enabled>true</enabled>

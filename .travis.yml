@@ -6,4 +6,4 @@ deploy:
   provider: heroku
   api_key: $HEROKU_API_KEY
   app: auth-chatapp
-before_install: ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -X -e
+before_install: ./mvnw clean install -DskipTests=true -Dmaven.javadoc.skip=true -e
