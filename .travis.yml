@@ -2,6 +2,8 @@ language: java
 jdk:
   - openjdk11
 dist: xenial
+rvm:
+  - 2.6
 before_deploy:
   - gem install faraday -v 1.10.0
 deploy:
