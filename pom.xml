@@ -90,7 +90,7 @@
 		<dependency>
 		    <groupId>com.github.iurilimamarques.chat-components</groupId>
 		    <artifactId>chat-entities</artifactId>
-		    <version>6d1fd08fbd</version>
+		    <version>527f6d48e6</version>
 		</dependency>
 	</dependencies>
 
@@ -99,7 +99,7 @@
 			<dependency>
 			    <groupId>com.github.iurilimamarques</groupId>
 			    <artifactId>chat-components</artifactId>
-			    <version>6d1fd08fbd</version>
+			    <version>527f6d48e6</version>
 			    <scope>import</scope>
 			    <type>pom</type>
 			</dependency>
