@@ -19,7 +19,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: iuridelimamarques@gmail.com
-    password: euzmznjjqbucbgqy
+    password: ebgvtfednefpcoqd
     properties:
       mail:
         smtp:

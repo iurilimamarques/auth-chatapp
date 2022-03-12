@@ -77,10 +77,10 @@
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-mongodb</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.querydsl</groupId>-->
+<!--			<artifactId>querydsl-mongodb</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>com.github.dozermapper</groupId>
 			<artifactId>dozer-core</artifactId>
