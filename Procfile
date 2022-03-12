@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar -Pprod target/auth-chatapp.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar -Dspring.profiles.active=prod target/auth-chatapp.jar
