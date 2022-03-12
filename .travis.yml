@@ -9,4 +9,4 @@ deploy:
   api_key: $HEROKU_API_KEY
   app: auth-chatapp
 before_install: 
-  - ./mvnw clean package -DskipTests=true -Dmaven.javadoc.skip=true -e
+  - ./mvnw clean package -DskipTests=true -Dmaven.javadoc.skip=true -Dspring.profiles.active=$ENVIRONMENT -e
