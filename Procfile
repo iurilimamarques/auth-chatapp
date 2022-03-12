@@ -1,1 +1,1 @@
-web: java -DactivatedProperties=$ENVIRONMENT -Dserver.port=$PORT $JAVA_OPTS -jar target/auth-chatapp.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar -DactivatedProperties=$ENVIRONMENT target/auth-chatapp.jar
