@@ -106,21 +106,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<profiles>
-		<profile>
-			<id>local</id>
-			<properties>
-				<active.profile>local</active.profile>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<active.profile>prod</active.profile>
-			</properties>
-		</profile>
-	</profiles>
-
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
