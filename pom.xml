@@ -110,16 +110,13 @@
 		<profile>
 			<id>local</id>
 			<properties>
-				<activatedProperties>local</activatedProperties>
+				<active.profile>local</active.profile>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 		<profile>
 			<id>prod</id>
 			<properties>
-				<activatedProperties>prod</activatedProperties>
+				<active.profile>prod</active.profile>
 			</properties>
 		</profile>
 	</profiles>
