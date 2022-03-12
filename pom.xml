@@ -108,18 +108,19 @@
 
 	<profiles>
 		<profile>
+			<id>local</id>
 			<properties>
-				<environment>local</environment>
-				<skipPageMappings>true</skipPageMappings>
+				<activatedProperties>local</activatedProperties>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
-				<property>
-					<name>environment</name>
-					<value>local</value>
-				</property>
 			</activation>
-			<id>local</id>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<activatedProperties>prod</activatedProperties>
+			</properties>
 		</profile>
 	</profiles>
 
