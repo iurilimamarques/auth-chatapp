@@ -19,7 +19,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Value("${auth-chatapp.expirationTime}")
+    @Value("${auth-chatapp.expiration-time}")
     private long expirationTime;
 
     public CustomUserDetailService(UserRepository userRepository) {

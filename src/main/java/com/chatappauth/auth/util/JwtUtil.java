@@ -22,7 +22,7 @@ public class JwtUtil {
 
     private final UserRepository userRepository;
 
-    @Value("${auth-chatapp.keySecret}")
+    @Value("${auth-chatapp.key-secret}")
     private String keySecret;
 
     public JwtUtil(UserRepository userRepository) {
