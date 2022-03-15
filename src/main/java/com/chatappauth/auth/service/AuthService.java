@@ -70,14 +70,10 @@ public class AuthService {
             UserPrincipalDto userDetails = (UserPrincipalDto) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             return new JwtResponseDto(jwt, userDetails.getUser().getId(), userDetails.getUser().getEmail(), userDetails.getUser().getName(), userDetails.getExpirationTime(), roles);
-        } catch (Exception e) {
-            String message = e.getMessage();
-            if (e instanceof BadCredentialsException) {
-                message = "Password is incorrect";
-            } else if(e instanceof LockedException || e instanceof DisabledException) {
-                message = "The user account is not enabled yet";
-            }
-            throw new RuntimeException(message);
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("Password is incorrect");
+        } catch (LockedException | DisabledException e) {
+            throw new RuntimeException("USER_VALIDATION");
         }
     }
 
