@@ -17,17 +17,8 @@ import java.util.Objects;
 @Configuration
 public class SpringConfig {
 
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private int port;
-
     @Value("${spring.redis.database}")
     private int database;
-
-    @Value("${spring.redis.password}")
-    private String password;
 
     @Value("${spring.redis.url}")
     private String url;
@@ -35,18 +26,16 @@ public class SpringConfig {
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() throws URISyntaxException {
         String environment = System.getenv("ENVIRONMENT");
+        URI redisURI = new URI(url);
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisURI.getHost());
+        redisStandaloneConfiguration.setPort(redisURI.getPort());
+        redisStandaloneConfiguration.setDatabase(database);
+
         if (Objects.isNull(environment) || !environment.equals("prod")) {
-            redisStandaloneConfiguration.setHostName(host);
-            redisStandaloneConfiguration.setPort(port);
-            redisStandaloneConfiguration.setDatabase(database);
             redisStandaloneConfiguration.setPassword(RedisPassword.none());
         } else {
-            URI redisURI = new URI(url);
-            redisStandaloneConfiguration.setHostName(redisURI.getHost());
-            redisStandaloneConfiguration.setPort(redisURI.getPort());
-            redisStandaloneConfiguration.setDatabase(database);
             redisStandaloneConfiguration.setPassword(redisURI.getUserInfo().split(":", 2)[1]);
         }
 
