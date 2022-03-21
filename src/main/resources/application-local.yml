@@ -13,6 +13,7 @@ spring:
     database: 0
     password:
     timeout: 60000
+    url:
   jpa:
     hibernate:
       ddl-auto: none
