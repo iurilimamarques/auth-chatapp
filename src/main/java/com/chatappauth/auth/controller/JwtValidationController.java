@@ -16,7 +16,7 @@ public class JwtValidationController {
     }
 
     @GetMapping(path = "validate-token/{token}")
-    public ResponseEntity validateToken(@PathVariable("token") String token) {
+    public ResponseEntity<Object> validateToken(@PathVariable("token") String token) {
         JwtValidationDto jwtValidationDto = jwtUtil.validateJwtToken(token);
         return ResponseEntity.ok(jwtValidationDto);
     }

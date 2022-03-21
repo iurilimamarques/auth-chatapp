@@ -1,6 +1,8 @@
 package com.chatappauth.auth.util;
 
 import com.auth0.jwt.JWT;
+import com.chatappauth.auth.blacklist.BlacklistEntity;
+import com.chatappauth.auth.blacklist.BlacklistRepository;
 import com.chatappauth.auth.dto.JwtValidationDto;
 import com.chatappauth.auth.dto.UserPrincipalDto;
 import com.chatappauth.auth.repository.UserRepository;
@@ -21,12 +23,14 @@ import java.util.Optional;
 public class JwtUtil {
 
     private final UserRepository userRepository;
+    private final BlacklistRepository blacklistRepository;
 
     @Value("${auth-chatapp.key-secret}")
     private String keySecret;
 
-    public JwtUtil(UserRepository userRepository) {
+    public JwtUtil(UserRepository userRepository, BlacklistRepository blacklistRepository) {
         this.userRepository = userRepository;
+        this.blacklistRepository = blacklistRepository;
     }
 
     public String generateJwtToken(Authentication authentication) {
@@ -51,6 +55,8 @@ public class JwtUtil {
         try {
             Jwts.parser().setSigningKey(keySecret).parseClaimsJws(authToken);
 
+            verifyTokenInBlacklist(authToken);
+
             Optional optional = userRepository.findOne(QUser.user.email.eq(getUserNameFromJwtToken(authToken)));
             User user = (User) optional.get();
 
@@ -70,6 +76,13 @@ public class JwtUtil {
             jwtValidationDto = new JwtValidationDto("JWT_NOT_VALID", "JWT claims string is empty: " + e.getMessage());
         }
         return jwtValidationDto;
+    }
+
+    private void verifyTokenInBlacklist(String jwtToken) {
+        Optional<BlacklistEntity> blacklistedToken = blacklistRepository.findByJwtToken(jwtToken);
+        if (blacklistedToken.isPresent()) {
+            throw new MalformedJwtException(jwtToken);
+        }
     }
 
     public String parseJwt(HttpServletRequest request) {

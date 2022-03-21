@@ -1,10 +1,14 @@
 package com.chatappauth.auth.config;
 
+import com.chatappauth.auth.customauthentication.CustomPostAuthenticationChecks;
+import com.chatappauth.auth.customauthentication.CustomPreAuthenticationChecks;
 import com.chatappauth.auth.service.springsecurityfilter.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,15 +28,30 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
-    }
+//    @Bean
+//    public AbstractUserDetailsAuthenticationProvider customAuthenticationProvider() {
+//        return new CustomAuthenticationProvider(userDetailService, passwordEncoder());
+//    }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    public AuthenticationProvider dao() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPreAuthenticationChecks(new CustomPreAuthenticationChecks());
+        provider.setPostAuthenticationChecks(new CustomPostAuthenticationChecks());
+        provider.setUserDetailsService(userDetailService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(dao());
+//        auth.authenticationProvider(customAuthenticationProvider());
     }
 
     @Override

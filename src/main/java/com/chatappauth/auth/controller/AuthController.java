@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 import java.io.IOException;
 
@@ -32,8 +33,14 @@ public class AuthController {
     }
 
     @GetMapping(path = "validate")
-    public ResponseEntity validate(@RequestParam(name = "validationCode") String validationCode,
+    public ResponseEntity<Object> validate(@RequestParam(name = "validationCode") String validationCode,
                                    @RequestParam(name = "username") String username) {
         return authService.validate(validationCode, username);
+    }
+
+    @GetMapping(path = "signout")
+    public ResponseEntity<Object> signoutUser(HttpServletRequest request) {
+        String jwtToken = request.getHeader("Authorization");
+        return authService.signoutUser(jwtToken);
     }
 }

@@ -7,6 +7,12 @@ server:
 spring:
   application:
     name: auth
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    password:
+    timeout: 60000
   jpa:
     hibernate:
       ddl-auto: none

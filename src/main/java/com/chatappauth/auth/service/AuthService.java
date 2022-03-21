@@ -1,5 +1,7 @@
 package com.chatappauth.auth.service;
 
+import com.chatappauth.auth.blacklist.BlacklistEntity;
+import com.chatappauth.auth.blacklist.BlacklistRepository;
 import com.chatappauth.auth.controller.projection.EmailValidationDto;
 import com.chatappauth.auth.dto.JwtResponseDto;
 import com.chatappauth.auth.dto.UserPrincipalDto;
@@ -40,19 +42,22 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final JavaMailSender javaMailSender;
+    private final BlacklistRepository blacklistRepository;
 
     public AuthService(PasswordEncoder passwordEncoder,
                        UserRepository userRepository,
                        AuthorityRepository authorityRepository,
                        AuthenticationManager authenticationManager,
                        JwtUtil jwtUtil,
-                       JavaMailSender javaMailSender) {
+                       JavaMailSender javaMailSender,
+                       BlacklistRepository blacklistRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.javaMailSender = javaMailSender;
+        this.blacklistRepository = blacklistRepository;
     }
 
     public JwtResponseDto signinUser(User user) {
@@ -74,6 +79,8 @@ public class AuthService {
             throw new RuntimeException("Password is incorrect");
         } catch (LockedException | DisabledException e) {
             throw new RuntimeException("USER_VALIDATION");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -81,7 +88,7 @@ public class AuthService {
         if (userRepository.exists(QUser.user.email.eq(user.getEmail())))
             throw new ValidationException("This e-mail address is already being used");
 
-        String validationCode = generateCode(6);
+        String validationCode = generateCode();
 
         user.setCodeValidation(validationCode);
         user.setStatus(UserStatus.USER_VALIDATION);
@@ -120,11 +127,12 @@ public class AuthService {
                 .replace("{{username}}", name);
     }
 
-    private String generateCode(int codeLength) {
+    private String generateCode() {
+        int CODE_LENGTH = 6;
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
-        while (salt.length() < codeLength) {
+        while (salt.length() < CODE_LENGTH) {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
@@ -132,7 +140,7 @@ public class AuthService {
         return ramdomCode;
     }
 
-    public ResponseEntity validate(String validationCode, String username) {
+    public ResponseEntity<Object> validate(String validationCode, String username) {
         Optional<User> userValidation = userRepository.findOne(QUser.user.email.eq(username).and(QUser.user.codeValidation.eq(validationCode)));
 
         if (userValidation.isPresent()) {
@@ -142,6 +150,12 @@ public class AuthService {
         } else {
             throw new javax.validation.ValidationException("Invalid code");
         }
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<Object> signoutUser(String jwtToken) {
+        BlacklistEntity blacklist = new BlacklistEntity(jwtToken);
+        blacklistRepository.save(blacklist);
         return ResponseEntity.ok().build();
     }
 }

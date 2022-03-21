@@ -92,6 +92,17 @@
 		    <artifactId>chat-entities</artifactId>
 		    <version>527f6d48e6</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>3.1.0</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
