@@ -8,10 +8,10 @@ spring:
   data:
     redis:
       repositories:
-        enabled: true
+        enabled: false
     jpa:
       repositories:
-        enabled: true
+        enabled: false
   application:
     name: auth
   redis:
