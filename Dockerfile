@@ -13,4 +13,4 @@ RUN ./mvnw package
 FROM amazoncorretto:11-alpine as production
 EXPOSE 8081
 COPY --from=build /app/target/auth-chatapp-*.jar /auth-chatapp.jar
-CMD ["java", "-jar", "-Dspring.profiles.active=${ENVIRONMENT}","/auth-chatapp.jar"]
+CMD ["nohup", "java", "-jar", "-Dspring.profiles.active=${ENVIRONMENT}","/auth-chatapp.jar"]
