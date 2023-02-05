@@ -45,6 +45,7 @@ auth-chatapp:
 
 logging:
   level:
+    com.zaxxer.hikari: DEBUG
     com.zaxxer.hikari.HikariConfig: DEBUG
     root: debug
 debug: true
