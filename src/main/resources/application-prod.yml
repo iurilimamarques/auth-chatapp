@@ -14,18 +14,6 @@ spring:
         enabled: false
   application:
     name: auth
-  redis:
-    url: ${REDISTOGO_URL}
-    database: 0
-  jpa:
-    hibernate:
-      ddl-auto: none
-    database-platform: ${DATABASE_DIALECT}
-  datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USER}
-    password: ${DATABASE_PASSWORD}
-    driver-class-name: ${DATABASE_DRIVER}
   mail:
     host: smtp.gmail.com
     port: 587
