@@ -22,22 +22,4 @@ public class AuthApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AuthApplication.class, args);
 	}
-
-	@Bean
-	public CorsFilter corsFilter() {
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		final CorsConfiguration config = new CorsConfiguration();
-
-		config.setAllowCredentials(true);
-
-		config.addAllowedOrigin("*");
-		config.addAllowedHeader("*");
-
-		for (HttpMethod httpMethod : HttpMethod.values()) {
-			config.addAllowedMethod(httpMethod);
-		}
-
-		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
-	}
 }
