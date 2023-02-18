@@ -7,6 +7,7 @@ COPY mvnw pom.xml ./
 RUN ./mvnw dependency:resolve
 COPY src ./src
 
+
 FROM base as build
 RUN ./mvnw package
 
