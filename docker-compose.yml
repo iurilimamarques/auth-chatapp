@@ -12,7 +12,7 @@ services:
     tty: true
     healthcheck:
       test: "curl --fail --silent localhost:8081/actuator/health | grep UP || exit 1"
-      interval: 20s
+      interval: 400s
       timeout: 5s
       retries: 5
-      start_period: 40s
+      start_period: 400s
