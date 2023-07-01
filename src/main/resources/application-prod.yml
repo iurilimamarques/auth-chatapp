@@ -5,13 +5,6 @@ server:
     include-exception: false
 
 spring:
-  data:
-    redis:
-      repositories:
-        enabled: false
-    jpa:
-      repositories:
-        enabled: false
   application:
     name: auth
   redis:
