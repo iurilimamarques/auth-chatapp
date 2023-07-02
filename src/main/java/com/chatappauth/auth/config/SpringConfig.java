@@ -45,6 +45,7 @@ public class SpringConfig {
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(new GenericToStringSerializer<>(Object.class));
         template.setEnableTransactionSupport(true);
+        template.setConnectionFactory(jedisConnectionFactory());
         return template;
     }
 }
